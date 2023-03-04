@@ -5,16 +5,15 @@ import service.PacketDetector;
 public class Main {
 
     public static void main(String[] args) {
-        PacketDetector agentDetector = new PacketDetector("\\Device\\NPF_Loopback", 1000);
+        PacketDetector agentDetector = new PacketDetector("\\Device\\NPF_{003D106A-B450-4AE1-B005-546BBB3C552C}", 1000);
         agentDetector.startDiscovering();
-
 
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        
+
         agentDetector.stopDiscovering();
     }
 }
