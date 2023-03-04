@@ -1,6 +1,6 @@
 package service.parser;
 
-public class MsgParser {
+public class SampledValuesParser {
 
     public String parse(byte[] packetData){
         if (packetData.length < 14) return null;
