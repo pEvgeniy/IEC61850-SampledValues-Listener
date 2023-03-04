@@ -21,7 +21,7 @@ public class PacketDetector {
     public void startDiscovering() {
         Listener listener = new Listener();
         if (!discovering) {
-            discoveringTask = pcapHelper.startPacketsCapturing(2505, listener, ses);
+            discoveringTask = pcapHelper.startPacketsCapturing(listener, ses);
             discovering = true;
         } else {
             log.trace("Can not discover: already discovering");
