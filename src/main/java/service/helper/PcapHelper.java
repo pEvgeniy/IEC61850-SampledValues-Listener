@@ -30,33 +30,22 @@ public class PcapHelper {
     }
 
     /**
-     * send packet into network
-     * @param packet - packet raw data
-     */
-    public void sendPacket(byte[] packet){
-        try {
-            pcapHandle.sendPacket(packet);
-        } catch (Exception e) {
-            log.error("Error during packet sending {}",e.toString());
-        }
-    }
-
-    /**
-     * @param port - port to use as filter to capture UDP packets
      * @param pl - Builder.Packet listener, called when required UDP packet received. it must contain logic to handle new data item
      * @param ses - executer to use to handle packets. NOTE : it occupies a thread
      * @return - task of packets capturing
      * @throws PcapNativeException  if pcap can not open found interface handle
      */
-    public ScheduledFuture<?> startPacketsCapturing(int port, PacketListener pl, ScheduledExecutorService ses) {
-        return startCapturingTask(port, pl, ses, pcapHandle);
+    public ScheduledFuture<?> startPacketsCapturing(PacketListener pl, ScheduledExecutorService ses) {
+        return startCapturingTask(pl, ses, pcapHandle);
 
     }
 
-    private ScheduledFuture<?> startCapturingTask(int port, PacketListener pl, ScheduledExecutorService ses, PcapHandle pcapHandle) {
+    private ScheduledFuture<?> startCapturingTask(PacketListener pl, ScheduledExecutorService ses, PcapHandle pcapHandle) {
+        String filterExpression = "ether proto 0x88BA";
+
         return ses.schedule(() -> {
             try {
-                pcapHandle.setFilter("ip proto \\udp && dst port " + port, BpfProgram.BpfCompileMode.NONOPTIMIZE);
+                pcapHandle.setFilter(filterExpression, BpfProgram.BpfCompileMode.NONOPTIMIZE);
             } catch (Exception e) {
                 e.printStackTrace();
                 log.error("error during filter applying {}", e.toString());
