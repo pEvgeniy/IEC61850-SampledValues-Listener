@@ -7,10 +7,8 @@ import java.nio.ByteBuffer;
 @Slf4j
 public class SampledValuesParser {
 
-    byte[] packetData;
-    int left = 0;
-
-    byte svIDLength;
+    private final byte[] packetData;
+    private int left = 0;
 
     public SampledValuesParser(byte[] packetData) {
         this.packetData = packetData;
@@ -75,7 +73,7 @@ public class SampledValuesParser {
 
     private String getSvID() {
         left = 33;
-        svIDLength = packetData[32];
+        byte svIDLength = packetData[32];
         byte[] svID = new byte[svIDLength];
         System.arraycopy(packetData, left, svID, 0, svIDLength);
         left += svIDLength;
