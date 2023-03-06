@@ -8,16 +8,14 @@ import service.parser.SampledValuesParser;
 
 @Slf4j
 public class Listener implements PacketListener {
-    SampledValuesParser msgParser = new SampledValuesParser();
     InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
     @Override
     public void gotPacket(Packet packet) {
         byte[] rawData = packet.getRawData();
-        String receivedMsg = msgParser.parse(rawData);
-        Packet payload = packet.getPayload();
-        log.info("received msg = {}\n" +
-                "payload = {}", receivedMsg, payload);
-        historyManager.add(receivedMsg);
+        SampledValuesParser msgParser = new SampledValuesParser(rawData);
+        msgParser.parse();
+
+//        historyManager.add();
     }
 }
